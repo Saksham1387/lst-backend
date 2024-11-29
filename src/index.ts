@@ -1,7 +1,7 @@
 require("dotenv").config();
 import express from "express";
 import { burnTokens, mintTokens, sendNativeTokens } from "./mintTokens";
-
+import { Request, Response } from 'express';
 const app = express();
 app.use(express.json());
 const VAULT = "6bEWYx8e7KgLHDGg65xfThZeDTBjZjFepnQvVmo6deBi";
@@ -24,7 +24,8 @@ app.post('/helius', async (req, res) => {
     // Check if the transaction has already been processed
     if (processedTransactions.has(signature)) {
         console.log("Transaction already processed:", signature);
-        return res.status(200).send('Duplicate transaction, skipped minting.');
+        res.status(200).send('Duplicate transaction, skipped minting.');
+        return
     }
 
     processedTransactions.add(signature);
@@ -37,7 +38,8 @@ app.post('/helius', async (req, res) => {
             console.log("Minting successful for:", toAddress);
         } catch (error) {
             console.error("Minting failed:", error);
-            return res.status(500).send('Minting failed.');
+            res.status(500).send('Minting failed.');
+            return
         }
     }
     res.status(200).send('Transaction successful');

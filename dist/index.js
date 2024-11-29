@@ -34,7 +34,8 @@ app.post('/helius', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     // Check if the transaction has already been processed
     if (processedTransactions.has(signature)) {
         console.log("Transaction already processed:", signature);
-        return res.status(200).send('Duplicate transaction, skipped minting.');
+        res.status(200).send('Duplicate transaction, skipped minting.');
+        return;
     }
     processedTransactions.add(signature);
     const type = "received_native_sol";
@@ -45,7 +46,8 @@ app.post('/helius', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         }
         catch (error) {
             console.error("Minting failed:", error);
-            return res.status(500).send('Minting failed.');
+            res.status(500).send('Minting failed.');
+            return;
         }
     }
     res.status(200).send('Transaction successful');
